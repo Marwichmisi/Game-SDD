@@ -1,7 +1,7 @@
 ---
 name: godot-export
 description: >
-  Export and build a Godot 4.7 project for distribution: install export templates,
+  Export and build a Godot 4.x project for distribution: install export templates,
   define export presets (Windows/macOS/Linux/Web/Android), run headless command-line
   exports for CI, and handle web (HTML5) COOP/COEP and dedicated-server/headless
   builds. Use when exporting a Godot game, configuring export_presets.cfg, building
@@ -11,7 +11,7 @@ description: >
 # Godot Export & Builds (4.x)
 
 Turn a project into runnable platform builds via export presets and the command line, and
-handle the web/dedicated-server gotchas. Targets **Godot 4.7**.
+handle the web/dedicated-server gotchas. Targets **Godot 4.x**.
 
 ## When to use
 
@@ -20,7 +20,8 @@ handle the web/dedicated-server gotchas. Targets **Godot 4.7**.
   (HTML5) and dedicated-server exports.
 
 **When *not* to use:** storefront publishing flows → `steam-publish`/`itch-publish`; the
-networking code of a server → `godot-multiplayer` (this skill covers building it headless).
+networking code of a server has no curated skill here (this skill only covers building it
+headless).
 
 ## Core workflow
 
@@ -118,6 +119,5 @@ func _ready() -> void:
 
 ## Related skills
 
-- `godot-multiplayer` — the dedicated-server code you export headless.
 - `steam-publish` / `itch-publish` — getting the build to players.
 - `prototype-fast` / `game-jam` — quick web/desktop builds for sharing.

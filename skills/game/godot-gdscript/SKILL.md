@@ -1,7 +1,7 @@
 ---
 name: godot-gdscript
 description: >
-  Write idiomatic GDScript for Godot 4.7: static typing, the node lifecycle
+  Write idiomatic GDScript for Godot 4.x: static typing, the node lifecycle
   (_ready/_process/_physics_process), @export/@onready/@tool annotations,
   signals, and await for asynchronous flow. Use when editing .gd scripts in a
   Godot project (project.godot), writing or debugging GDScript, or porting 3.x
@@ -11,7 +11,7 @@ description: >
 # Godot GDScript (4.x)
 
 Write correct, statically typed GDScript and use the node lifecycle and signal
-system the way the engine intends. Targets **Godot 4.7** (GDScript 2.0).
+system the way the engine intends. Targets **Godot 4.x** (GDScript 2.0).
 
 ## When to use
 
@@ -21,7 +21,8 @@ system the way the engine intends. Targets **Godot 4.7** (GDScript 2.0).
 
 **When *not* to use:** scene/node structure and instancing questions →
 `godot-nodes-scenes`; signal *architecture*/decoupling patterns →
-`godot-signals-groups`; using C# instead of GDScript → `godot-csharp`.
+`godot-signals-groups`; using C# instead of GDScript is out of this catalog's scope
+(see `docs/adr/0002-gdscript-first.md`) — read the Godot C# API docs directly.
 
 ## Core workflow
 
@@ -127,4 +128,3 @@ func get_first_name(d: Dictionary) -> String:
 - `godot-nodes-scenes` — the scene tree, instancing, and autoloads.
 - `godot-signals-groups` — event-driven architecture with signals and groups.
 - `godot-resources` — data-driven design with custom `Resource` types.
-- `godot-csharp` — the same engine concepts using C#/.NET.

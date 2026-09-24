@@ -1,7 +1,7 @@
 ---
 name: godot-nodes-scenes
 description: >
-  Structure a Godot 4.7 project with the scene tree and node composition: build
+  Structure a Godot 4.x project with the scene tree and node composition: build
   reusable scenes, instance PackedScenes at runtime, navigate the tree safely,
   and register autoload singletons. Use when designing .tscn scenes, deciding how
   to split nodes, spawning instances with instantiate(), wiring autoloads, or
@@ -11,7 +11,7 @@ description: >
 # Godot Nodes & Scenes (4.x)
 
 Compose games from nodes and scenes, instance them at runtime, and access the tree
-without crashing on freed or missing nodes. Targets **Godot 4.7**.
+without crashing on freed or missing nodes. Targets **Godot 4.x**.
 
 ## When to use
 
@@ -21,7 +21,8 @@ without crashing on freed or missing nodes. Targets **Godot 4.7**.
   previously freed instance".
 
 **When _not_ to use:** GDScript language/syntax → `godot-gdscript`; signal-based
-decoupling → `godot-signals-groups`; physics bodies/collisions → `godot-physics`.
+decoupling → `godot-signals-groups`; physics bodies/collisions have no curated skill
+here — read the Godot physics API docs directly.
 
 ## Core workflow
 
@@ -120,4 +121,3 @@ func go_to_level_2() -> void:
 - `godot-gdscript` — language, lifecycle, and `@onready`.
 - `godot-signals-groups` — decouple instanced scenes from their spawner.
 - `godot-resources` — share data between instances without duplicating it.
-- `save-systems` — persist scene/game state across runs.

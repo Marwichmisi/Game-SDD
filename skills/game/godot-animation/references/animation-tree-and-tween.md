@@ -1,4 +1,4 @@
-# AnimationTree & Tween reference (Godot 4.7)
+# AnimationTree & Tween reference (Godot 4.x)
 
 Depth companion to `godot-animation`.
 

@@ -72,13 +72,9 @@ If one subsystem blows its slice, that's your target — not whatever you assume
 ### 2. Measure with the engine profiler (do this before any fix)
 
 ```text
-Godot 4.7 : Debugger ▸ Profiler (script/physics time) and Monitors tab (FPS, draw calls, memory).
+Godot 4.x : Debugger ▸ Profiler (script/physics time) and Monitors tab (FPS, draw calls, memory).
             In code: Performance.get_monitor(Performance.TIME_PROCESS) and
             Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME).
-Unity 6.3 LTS   : Profiler window (CPU/GPU/Memory/Rendering modules) + Frame Debugger for draw calls.
-            In code: a ProfilerRecorder tracking "CPU Main Thread Frame Time" for a HUD/log.
-Unreal 5  : `stat unit` (Frame/Game/Draw/GPU ms), `stat fps`, `stat scenerendering` (draw calls);
-            Unreal Insights for deep traces.
 # Read the split: is the Draw/GPU line the biggest, or the Game/CPU line? That decides the fix.
 ```
 
@@ -86,7 +82,7 @@ Unreal 5  : `stat unit` (Frame/Game/Draw/GPU ms), `stat fps`, `stat scenerenderi
 
 ```gdscript
 # Bullets, particles, enemies, damage numbers: reuse a fixed set instead of instantiate()/free()
-# every frame — that thrashes memory and (in C#) feeds the GC.
+# every frame — that thrashes memory and frees nodes for the allocator to reclaim.
 var _pool: Array[Node] = []
 func acquire() -> Node:
     var n: Node = _pool.pop_back() if not _pool.is_empty() else bullet_scene.instantiate()
@@ -103,8 +99,7 @@ func release(n: Node) -> void:
 ```text
 Each unique material/texture/state change is roughly a draw call; thousands of them stall the GPU.
 - Atlas textures and share materials so sprites/meshes batch into one call.
-- Identical meshes → GPU instancing (Unity), MultiMesh / MultiMeshInstance (Godot), Instanced
-  Static Mesh (Unreal).
+- Identical meshes → MultiMesh / MultiMeshInstance, or GPUParticles.
 - Static geometry → static batching / baking; mark non-moving objects static.
 - Reduce overdraw: limit large overlapping transparent/particle layers (they re-shade pixels).
 - Fewer real-time lights/shadows; bake lighting where it doesn't move.
@@ -113,15 +108,15 @@ Measure draw calls before and after — the count should drop, and so should GPU
 
 ### 5. Kill per-frame allocations (GC spikes = stutter)
 
-```csharp
-// Unity 6.3 LTS (C#). Allocating every frame fills the managed heap; the GC then stalls a frame.
-// WRONG (allocates each call): foreach (var e in FindObjectsOfType<Enemy>()) ...  // + LINQ, new[]
-// RIGHT: cache references once, reuse buffers, avoid LINQ/boxing in Update.
-void Update() {
-    _hits = Physics.RaycastNonAlloc(ray, _hitBuffer);   // reuse a preallocated array
-    for (int i = 0; i < _hits; i++) { /* ... */ }       // no per-frame allocation
-}
-// Godot/GDScript: avoid building new arrays/dictionaries every frame in _process; reuse them.
+```gdscript
+// Allocating every frame thrashes memory and eventually stalls a frame.
+// WRONG (allocates each call): var hits := get_overlapping_bodies()  # + new[]
+// RIGHT: cache references once, reuse buffers, avoid rebuilding containers in _process.
+func _physics_process(_dt: float) -> void:
+    _hits.assign(get_overlapping_bodies())      # reuses the array
+    for body in _hits:                          # no per-frame allocation
+        pass
+// Avoid building new arrays/dictionaries every frame in _process; reuse them.
 ```
 
 ## Pitfalls
@@ -136,8 +131,8 @@ void Update() {
   full-scene query is the real cost. Reduce the work, don't polish it.
 - **Instantiate/free in hot loops.** Spawning and destroying bullets/particles every frame causes
   fragmentation and GC spikes. Pool them.
-- **Per-frame allocations / LINQ / boxing in `Update`** (C#) feed the GC → periodic hitches.
-  Cache and reuse.
+- **Per-frame allocations** (new `Array`/`Dictionary` in `_process`) fragment memory and cause
+  periodic hitches. Cache and reuse.
 - **Draw-call explosion** from unique materials and unbatched sprites/meshes. Atlas, share
   materials, instance, batch.
 - **Overdraw** from stacked transparents/particles/full-screen effects re-shading pixels.
@@ -156,5 +151,3 @@ void Update() {
 
 - `physics-tuning` — simulation cost, fixed-step budget, sleeping bodies, broadphase layers.
 - `godot-export` — release/build settings that affect measured performance.
-- `procedural-gen`, `game-ai` — common CPU hotspots (generation, pathfinding) to budget and defer.
-- `roguelike`, `tower-defense`, `survival-crafting` — entity-heavy genres that need pooling/budgets.

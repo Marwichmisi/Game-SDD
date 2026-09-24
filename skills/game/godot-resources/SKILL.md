@@ -1,7 +1,7 @@
 ---
 name: godot-resources
 description: >
-  Design data-driven Godot 4.7 games with custom Resource classes: define typed
+  Design data-driven Godot 4.x games with custom Resource classes: define typed
   data with class_name + @export, save/load .tres/.res files, instance and duplicate
   resources, and load on demand with ResourceLoader (incl. threaded loading). Use
   when modeling items/stats/configs as data in a Godot project, creating .tres
@@ -11,7 +11,7 @@ description: >
 # Godot Resources (4.x)
 
 Model game data as reusable, Inspector-editable `Resource` objects instead of hard-coded
-values, and load/save them as `.tres`/`.res`. Targets **Godot 4.7**.
+values, and load/save them as `.tres`/`.res`. Targets **Godot 4.x**.
 
 ## When to use
 
@@ -19,8 +19,8 @@ values, and load/save them as `.tres`/`.res`. Targets **Godot 4.7**.
   data; authoring `.tres` files in the Inspector; or loading/saving custom resources.
 
 **When *not* to use:** nodes/scene structure → `godot-nodes-scenes`; saving the player's
-*runtime progress* (engine-agnostic save format/slots) → `save-systems`; the C# variant of
-this pattern → `godot-csharp`.
+*runtime progress* has no curated skill here — read the Godot file-access API docs directly;
+the C# variant of this pattern is out of scope (see `docs/adr/0002-gdscript-first.md`).
 
 ## Core workflow
 
@@ -116,5 +116,3 @@ func load_config() -> Resource:
 
 - `godot-gdscript` — `@export` annotations used to define resource fields.
 - `godot-nodes-scenes` — instancing scenes vs. sharing resource data.
-- `save-systems` — persisting runtime progress (separate from static data).
-- `unity-scriptableobjects` — the equivalent data-asset pattern in Unity.

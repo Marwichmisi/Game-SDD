@@ -1,7 +1,7 @@
 ---
 name: godot-signals-groups
 description: >
-  Build event-driven, decoupled Godot 4.7 gameplay with signals and node groups:
+  Build event-driven, decoupled Godot 4.x gameplay with signals and node groups:
   declare and emit custom signals, connect with Callables (incl. bind/one-shot),
   and broadcast to many nodes via groups and call_group. Use when wiring node
   communication in a Godot project, replacing tight references with signals,
@@ -11,7 +11,7 @@ description: >
 # Godot Signals & Groups (4.x)
 
 Decouple nodes with the observer pattern (signals) and act on many nodes at once
-(groups), instead of hard-coding references between scenes. Targets **Godot 4.7**.
+(groups), instead of hard-coding references between scenes. Targets **Godot 4.x**.
 
 ## When to use
 
@@ -128,4 +128,3 @@ func open_chest() -> void:
 
 - `godot-gdscript` — signal/`await` syntax fundamentals.
 - `godot-nodes-scenes` — autoloads for global event buses.
-- `game-ai` — state machines that often drive and consume these events.

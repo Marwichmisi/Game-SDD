@@ -13,8 +13,8 @@ description: >
 A level is a **sequence of intentional experiences** delivered through space.
 Good level design is a *process*: define the metrics movement is built on, block
 out geometry with primitives, play it, then dress it — never the reverse. This
-skill is the engine-neutral practice; use `godot-tilemap`/`unity-tilemap-2d` to
-lay out 2D grids and gridmaps for 3D.
+skill is the engine-neutral practice; lay out 2D grids and 3D gridmaps with the
+Godot scene and tilemap nodes directly (no tilemap skill is curated here).
 
 ## When to use
 
@@ -25,10 +25,11 @@ lay out 2D grids and gridmaps for 3D.
 - Use to derive level **metrics** from the character's movement so geometry is
   reachable and fair.
 
-**When *not* to use:** to *generate* levels algorithmically, use `procedural-gen`
-(authored and procedural design are complementary). For the engine's tile/grid
-painting tools, use `godot-tilemap` / `unity-tilemap-2d`. For the movement
-abilities the metrics come from, that's the engine movement skill + `input-systems`.
+**When *not* to use:** to *generate* levels algorithmically there is no curated skill
+here (authored and procedural design are complementary — read the Godot API docs
+directly). For the engine's tile/grid painting tools, use the Godot tilemap nodes
+directly. For the movement abilities the metrics come from, that's your own
+movement script.
 
 ## Core workflow
 
@@ -122,7 +123,8 @@ const ROOMS := {
 - **One-way drops with no signposting** strand or surprise players. Telegraph
   irreversible moves.
 - **Confusing procedural with authored.** Generation gives variety, not
-  authored pacing. Use `procedural-gen` for variety; hand-author for intent.
+  authored pacing. Generate for variety (no generation skill is curated here);
+  hand-author for intent.
 
 ## References
 
@@ -132,7 +134,5 @@ const ROOMS := {
 
 ## Related skills
 
-- `godot-tilemap`, `unity-tilemap-2d` — paint 2D level grids; gridmaps for 3D.
-- `procedural-gen` — generate variety to complement authored structure.
-- `game-ai` — encounter enemies that navigate the space you build.
-- `platformer`, `puzzle`, `roguelike` — genres that compose this skill.
+- `godot-nodes-scenes` — the scenes the blockout is composed from.
+- `prototype-fast` — test a mechanic before a level is built around it.

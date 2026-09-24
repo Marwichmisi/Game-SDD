@@ -110,8 +110,8 @@ spike. Prototype code carries prototype assumptions; shipping it ships the assum
 ## References
 
 - For working under a hard external deadline and submitting, read the `game-jam` skill.
-- For the engine-specific core loop you'll greybox in, read that engine's skill
-  (`godot-gdscript`, `phaser-core`, `love2d-core`, `unity-csharp-scripting`, …).
+- For the engine-specific core loop you'll greybox in, read `godot-gdscript` and
+  `godot-nodes-scenes`.
 
 ## Related skills
 

@@ -133,11 +133,9 @@ updates:
 
 - Don't compress or encrypt your own pack files in ways that cross asset boundaries — a small
   change then rewrites the whole compressed blob. Let Steam do compression on its side.
-- Localize asset changes within pack files; avoid reshuffling asset order; keep pack files to
-  ~1-2 GB and grouped by level/feature; add **new** pack files for new content instead of
-  rewriting big existing ones.
-- **Unreal Engine** pak alignment: build with `-patchpaddingalign=1048576 -blocksize=1048576`
-  so re-alignments shift by SteamPipe's block size and patches stay small.
+- Localize asset changes inside the PCK; avoid reshuffling the import order of unchanged assets,
+  and group big content by level/feature so a change touches one chunk instead of the whole
+  build. Godot has no block-alignment flag to tune: the lever is *what changed*, not the packing.
 
 ## 6. Troubleshooting table
 

@@ -19,9 +19,9 @@ playable*, not *the game you imagined*.
 - Use when the user asks "what can I actually build in a weekend" or "how do I submit to
   this jam".
 
-**When *not* to use:** building the *core loop* in engine code (use the engine skill —
-`godot-2d-movement`, `phaser-core`, etc. — or a genre skill like `platformer`); throwaway
-experiments with no deadline (use `prototype-fast`); shipping a commercial release (use
+**When *not* to use:** building the *core loop* in engine code (use `godot-gdscript`
+and `godot-nodes-scenes`); throwaway experiments with no deadline (use
+`prototype-fast`); shipping a commercial release (use
 `steam-publish` / `itch-publish`).
 
 ## Core workflow
@@ -120,5 +120,4 @@ Default answer under deadline pressure is CUT. You can always add in a post-jam 
 
 - `prototype-fast` — validate a mechanic quickly before committing jam hours to it.
 - `itch-publish` — create the page and upload the build (most jams are hosted on itch.io).
-- Engine cores (`phaser-core`, `love2d-core`, `godot-gdscript`, …) and genre skills
-  (`platformer`, `roguelike`, …) — build the actual loop the jam scopes around.
+- `godot-gdscript` / `godot-nodes-scenes` — build the actual loop the jam scopes around.

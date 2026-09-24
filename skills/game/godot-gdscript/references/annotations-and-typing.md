@@ -1,4 +1,4 @@
-# GDScript annotations & typing reference (Godot 4.7)
+# GDScript annotations & typing reference (Godot 4.x)
 
 Depth companion to `godot-gdscript`. All annotations start with `@` in GDScript 2.0.
 
@@ -36,8 +36,8 @@ Export a typed array of resources (great for data-driven design):
 - `@tool` — run the script in the editor (top of file). Guard editor-only code with
   `if Engine.is_editor_hint():`.
 - `@icon("res://icon.svg")` — custom Inspector icon for a `class_name` type.
-- `@rpc("any_peer", "call_local", "reliable")` — mark a networked method (see
-  `godot-multiplayer`).
+- `@rpc("any_peer", "call_local", "reliable")` — mark a networked method (no networking
+  skill is curated here; read the Godot multiplayer API docs directly).
 - `@warning_ignore("unused_variable")` — silence a specific parser warning.
 - `@static_unload` — allow a script's static variables to unload.
 

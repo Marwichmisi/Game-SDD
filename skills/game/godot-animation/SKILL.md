@@ -1,7 +1,7 @@
 ---
 name: godot-animation
 description: >
-  Animate in Godot 4.7 three ways: AnimationPlayer for keyframed clips (incl. call
+  Animate in Godot 4.x three ways: AnimationPlayer for keyframed clips (incl. call
   and signal tracks), AnimationTree with state machines and blend spaces for
   character animation, and Tween for short procedural/UI tweens via create_tween().
   Use when working with AnimationPlayer/AnimationTree nodes in a .tscn, blending
@@ -11,16 +11,16 @@ description: >
 # Godot Animation (4.x)
 
 Choose and drive the right animation tool: `AnimationPlayer` (clips), `AnimationTree`
-(blending/state machines), or `Tween` (short procedural moves). Targets **Godot 4.7**.
+(blending/state machines), or `Tween` (short procedural moves). Targets **Godot 4.x**.
 
 ## When to use
 
 - Use when playing keyframed animations, blending walk/run/idle states, animating a
   sprite sheet, or tweening UI/objects in code.
 
-**When *not* to use:** the movement *logic* that decides which state to play →
-`godot-2d-movement`; UI layout (vs. UI tweening) → `godot-ui-control`; shader-driven
-effects → `godot-shaders`.
+**When *not* to use:** the movement *logic* that decides which state to play → your own
+movement script; UI layout (vs. UI tweening) and shader-driven effects have no curated skill
+here — read the Godot UI and shader API docs directly.
 
 ## Core workflow
 
@@ -117,7 +117,6 @@ func pop_in(node: Control) -> void:
 
 ## Related skills
 
-- `godot-2d-movement` — supplies the velocity/state that selects animations.
-- `godot-ui-control` — UI that Tweens animate.
-- `godot-3d-essentials` — 3D character scenes driven by AnimationTree.
-- `game-ai` — state machines that mirror animation states.
+- `godot-gdscript` — the scripting the animation code is written in.
+- `godot-nodes-scenes` — the scene tree holding the `AnimationPlayer`.
+- `game-feel` — the feedback bundles that drive tweens and one-shots.

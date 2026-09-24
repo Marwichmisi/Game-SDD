@@ -5,7 +5,7 @@ description: >
   timestep, render interpolation, mass/gravity/drag, continuous collision
   detection (CCD) to stop tunneling, fixing jitter, and collision layers/masks.
   Engine-neutral. Use when the user mentions physics feel, jitter, tunneling,
-  fixed timestep, FixedUpdate, CCD, bouncing/unstable physics, or collision layers.
+  fixed timestep, the physics callback, CCD, bouncing/unstable physics, or collision layers.
 ---
 
 # Physics tuning
@@ -13,8 +13,8 @@ description: >
 Most "bad physics" is not a bug in the engine — it's a mismatch between the
 **fixed-timestep simulation** and the **variable-rate render loop**, or untuned
 mass/drag/CCD/layer settings. This skill covers the engine-neutral knobs that
-make physics stable and responsive; pair it with `godot-physics` or
-`unity-physics` for the concrete APIs.
+make physics stable and responsive; pair it with the Godot physics nodes in your
+own project for the concrete APIs (no physics skill is curated here).
 
 ## When to use
 
@@ -26,10 +26,10 @@ make physics stable and responsive; pair it with `godot-physics` or
   collision layers/masks.
 
 **When *not* to use:** for an engine's exact physics nodes/components and
-collision callbacks, use `godot-physics` or `unity-physics`. For *movement
-decisions* (when to jump, AI steering) use `input-systems` and `game-ai`. For
-platformer jump-feel specifics like coyote time/jump buffering, that's input/
-controller territory — see `input-systems` and the `platformer` genre.
+collision callbacks, use the Godot physics nodes directly. For *movement
+decisions* (when to jump), that is your own movement script. For controller
+responsiveness like coyote time/jump buffering, that is input handling in your
+own project (no input skill is curated here).
 
 ## Core workflow
 
@@ -37,11 +37,11 @@ controller territory — see `input-systems` and the `platformer` genre.
    Hz). A fixed `dt` makes the simulation deterministic-ish and stable; a
    variable `dt` makes integration and collisions inconsistent.
 2. **Put physics work in the physics callback**, not the render frame. Apply
-   forces/velocities and read collisions in the fixed step (`FixedUpdate` /
-   `_physics_process`), using that step's `dt`.
+   forces/velocities and read collisions in `_physics_process`, using that
+   step's `dt`.
 3. **Interpolate rendering between physics ticks.** The render frame rate ≠ the
    physics rate, so smoothly interpolate transforms toward the latest physics
-   state, or enable the engine's Rigidbody interpolation, to remove visible
+   state, or enable the project's physics interpolation, to remove visible
    stutter.
 4. **Tune the body, not the scene.** Set mass for relative weight, drag for
    damping, gravity scale per object, and restitution/friction via materials.
@@ -57,29 +57,28 @@ controller territory — see `input-systems` and the `platformer` genre.
 
 ```gdscript
 # Physics callback: runs at the FIXED rate. Use its dt for all integration.
-func _physics_process(dt):                  # Unity: void FixedUpdate()
+func _physics_process(dt):
     velocity += gravity * dt                # integrate with the FIXED dt
     move_and_slide()                        # engine resolves collisions this step
     _prev_pos = _curr_pos; _curr_pos = global_position   # record for interpolation
 
 # Render frame: runs as fast as the display. Interpolate between physics states.
-func _process(_frame_dt):                   # Unity: void Update()
+func _process(_frame_dt):
     var alpha = Engine.get_physics_interpolation_fraction()  # 0..1 within the tick
     visual.global_position = _prev_pos.lerp(_curr_pos, alpha)
 # RIGHT: integrate in the fixed step, render via interpolation.
-# WRONG: applying forces in _process/Update with frame dt — speed and collisions
+# WRONG: applying forces in _process with frame dt — speed and collisions
 # then depend on frame rate and jitter under load.
 ```
 
-Most engines offer this for you (Godot `physics_interpolation`/Rigidbody
-interpolate; Unity `Rigidbody.interpolation = Interpolate`). Prefer the built-in
-before hand-rolling.
+Godot ships this for you: enable the project's `physics_interpolation` setting (or use
+the built-in interpolation on the body) before hand-rolling.
 
 ### 2. Stop tunneling: CCD + a speed cap
 
 ```gdscript
 # Fast, small bodies skip past thin colliders between ticks. Two fixes:
-body.continuous_cd = true            # RigidBody3D bool (RigidBody2D: CCD_MODE_* enum). Unity: rb.collisionDetectionMode = Continuous
+body.continuous_cd = true            # RigidBody3D bool (RigidBody2D: CCD_MODE_* enum)
 # Cap velocity so a single step can't move more than ~one collider thickness.
 const MAX_SPEED := 40.0
 if velocity.length() > MAX_SPEED:
@@ -94,10 +93,10 @@ if velocity.length() > MAX_SPEED:
 # Mass is RELATIVE weight in collisions; it does NOT change fall speed (gravity
 # accelerates all masses equally). Use drag and gravity_scale to shape feel.
 body.mass = 2.0                      # heavier pushes lighter in collisions
-body.linear_damp = 0.5               # air drag: higher = stops sooner (Unity: drag)
+body.linear_damp = 0.5               # air drag: higher = stops sooner
 body.gravity_scale = 1.5             # per-object gravity multiplier (snappier fall)
 # Bounce/slide come from the physics material, not code:
-material.bounce = 0.2                # restitution 0..1 (Unity: bounciness)
+material.bounce = 0.2                # restitution 0..1
 material.friction = 0.8              # surface grip
 ```
 
@@ -110,8 +109,7 @@ player.collision_layer = LAYER_PLAYER
 player.collision_mask  = LAYER_WORLD | LAYER_ENEMY     # player detects world+enemies
 pickup.collision_layer = LAYER_PICKUP
 pickup.collision_mask  = LAYER_PLAYER                  # pickup only reacts to player
-# Unity equivalent: assign GameObject layers and edit the Physics collision matrix
-# (or Physics.IgnoreLayerCollision). Keep a named layer constant table, not magic numbers.
+# Keep a named layer constant table, not magic numbers.
 ```
 
 ## Pitfalls
@@ -143,7 +141,4 @@ pickup.collision_mask  = LAYER_PLAYER                  # pickup only reacts to p
 
 ## Related skills
 
-- `godot-physics`, `unity-physics` — concrete bodies, colliders, and callbacks.
-- `input-systems` — responsive controls, jump buffering, coyote time.
-- `game-ai` — agent movement that must agree with the physics step.
-- `platformer`, `fps-shooter` — genres whose feel depends on this tuning.
+- `performance-optimization` — measure the cost of the step you tuned.
